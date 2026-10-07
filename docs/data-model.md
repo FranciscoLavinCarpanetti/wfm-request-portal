@@ -1,8 +1,8 @@
-# Data Model
+# Modelo de datos
 
-The portfolio implementation uses a generic request model.
+La implementación de portfolio utiliza un modelo genérico de solicitudes.
 
-## Request
+## Solicitud
 
 ```text
 Request
@@ -20,7 +20,7 @@ Request
 └── CreatedAt
 ```
 
-## Request types
+## Tipos de solicitud
 
 ```text
 SHIFT_CHANGE
@@ -28,7 +28,9 @@ REMOTE_WORK
 LEAVE
 ```
 
-## Statuses
+Los identificadores internos se mantienen en inglés porque representan valores técnicos estables; la interfaz pública los presenta en español.
+
+## Estados
 
 ```text
 DRAFT
@@ -40,10 +42,10 @@ CANCELLED
 ERROR
 ```
 
-## Design considerations
+## Consideraciones
 
-A production implementation should use stable identifiers rather than display names for users and related entities.
+Una implementación productiva debe utilizar identificadores estables en lugar de nombres visibles para usuarios y entidades relacionadas.
 
-Dates should be stored in a consistent timezone strategy and converted only at the presentation boundary.
+Las fechas deben almacenarse con una estrategia de zona horaria consistente y convertirse únicamente en la frontera de presentación.
 
-Status changes should be validated against the allowed state machine.
+Los cambios de estado deben validarse contra la máquina de estados permitida.
