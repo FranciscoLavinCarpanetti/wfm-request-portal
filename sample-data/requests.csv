@@ -1,6 +1,6 @@
 RequestId,RequestType,Requester,StartDate,EndDate,Status,Comments
-REQ-0001,SHIFT_CHANGE,Ana Martin,2026-11-03,2026-11-03,APPROVED,Swap morning shift
-REQ-0002,REMOTE_WORK,Carlos Ruiz,2026-11-05,2026-11-05,PENDING_APPROVAL,Remote work request
-REQ-0003,LEAVE,Laura Gomez,2026-11-10,2026-11-12,REJECTED,Insufficient coverage
-REQ-0004,SHIFT_CHANGE,Daniel Perez,2026-11-14,2026-11-14,SUBMITTED,Schedule adjustment
-REQ-0005,LEAVE,Marta Lopez,2026-12-01,2026-12-03,DRAFT,Annual leave
+REQ-0001,SHIFT_CHANGE,Ana Martin,2026-11-03,2026-11-03,APPROVED,Cambio de turno de mañana
+REQ-0002,REMOTE_WORK,Carlos Ruiz,2026-11-05,2026-11-05,PENDING_APPROVAL,Solicitud de teletrabajo
+REQ-0003,LEAVE,Laura Gomez,2026-11-10,2026-11-12,REJECTED,Cobertura insuficiente
+REQ-0004,SHIFT_CHANGE,Daniel Perez,2026-11-14,2026-11-14,SUBMITTED,Ajuste de planificación
+REQ-0005,LEAVE,Marta Lopez,2026-12-01,2026-12-03,DRAFT,Vacaciones anuales
