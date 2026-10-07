@@ -1,14 +1,28 @@
 # WFM Request Portal
 
-Repositorio de referencia para documentar y evolucionar una solución de **Workforce Management (WFM)** orientada a la gestión estructurada de solicitudes operativas.
+> Registro técnico y funcional de una solución de **Workforce Management (WFM)** orientada a solicitudes operativas, trazabilidad y análisis de impacto sobre la capacidad.
 
-El objetivo de este repositorio es mantener un registro técnico y funcional de lo que se va construyendo: decisiones, arquitectura, reglas, modelos de datos, workflows, pruebas, simulaciones y evolución futura de la solución.
+## Demo en vivo
 
-> **Proyecto independiente:** el repositorio utiliza conceptos y patrones generales de WFM, automatización y desarrollo de software. No contiene datos reales, credenciales, configuraciones privadas ni activos pertenecientes a terceros.
+<p align="center">
+  <a href="https://franciscolavincarpanetti.github.io/wfm-request-portal/">
+    <strong>▶ ABRIR DEMO INTERACTIVA</strong>
+  </a>
+</p>
 
-## Objetivo
+**Prueba directamente en el navegador:** creación de solicitudes, cambio de turno, validaciones, filtros, aprobación/rechazo, historial y simulación de impacto WFM.
 
-Transformar la gestión de solicitudes operativas en un proceso estructurado, trazable y preparado para evolucionar hacia capacidades más avanzadas de WFM.
+| Puedes probar | Código que lo controla |
+|---|---|
+| Nueva solicitud | [demo/index.html](./demo/index.html) · [demo/app.js](./demo/app.js) |
+| Cambio de turno | [demo/app.js](./demo/app.js) |
+| Aprobar / rechazar | [demo/app.js](./demo/app.js) |
+| Impacto de capacidad | [demo/wfm-engine.js](./demo/wfm-engine.js) |
+| Pruebas automáticas | [tests/wfm-engine.test.js](./tests/wfm-engine.test.js) |
+
+---
+
+## Qué estamos construyendo
 
 La solución parte de tres tipos de solicitud:
 
@@ -16,7 +30,7 @@ La solución parte de tres tipos de solicitud:
 - Teletrabajo.
 - Vacaciones.
 
-Y contempla su recorrido desde la creación hasta la decisión:
+El flujo funcional es:
 
 ```text
 Solicitud
@@ -30,27 +44,25 @@ Pendiente de aprobación
 Aprobada / Rechazada
    ↓
 Historial y auditoría
+   ↓
+Impacto sobre capacidad WFM
 ```
 
-La intención no es limitar la solución a la gestión administrativa de solicitudes. El proyecto está diseñado para evolucionar hacia el análisis de cómo cada solicitud puede modificar la **capacidad operativa y la cobertura WFM**.
+La aplicación no se limita a registrar solicitudes: el objetivo es relacionar cada cambio con su posible efecto sobre la **capacidad, cobertura y riesgo operativo**.
 
-## Qué estamos construyendo
+## Experiencia funcional
 
-### Gestión de solicitudes
+**1. Solicitudes**
 
-- Creación de solicitudes.
-- Validación de datos.
-- Consulta de solicitudes.
-- Búsqueda y filtrado.
-- Detalle de cada solicitud.
-- Cancelación cuando corresponda.
-- Aprobación y rechazo.
-- Registro del motivo de rechazo.
-- Historial de eventos.
+- Crear y validar solicitudes.
+- Buscar y filtrar.
+- Consultar detalle.
+- Cancelar cuando corresponda.
+- Aprobar o rechazar.
+- Registrar motivo de rechazo.
+- Consultar historial.
 
-### Impacto WFM
-
-La solución incorpora un primer motor determinista para relacionar:
+**2. Simulación WFM**
 
 ```text
 Solicitud
@@ -66,124 +78,119 @@ Cobertura
 Nivel de impacto
 ```
 
-Esta primera versión es deliberadamente sencilla. Su finalidad es establecer una base sobre la que posteriormente puedan incorporarse forecast, AHT, volumen, intervalos, occupancy, service level, shrinkage, Erlang C y dimensionamiento.
+El motor actual es determinista y constituye la base para incorporar posteriormente forecast, AHT, volumen, intervalos, occupancy, service level, shrinkage, Erlang C y dimensionamiento.
 
-## Arquitectura de referencia
+---
 
-La arquitectura funcional se organiza en capas:
-
-```text
-                 ┌─────────────────────┐
-                 │      Usuario         │
-                 └──────────┬──────────┘
-                            ↓
-                 ┌─────────────────────┐
-                 │    Presentación     │
-                 │    Power Apps       │
-                 └──────────┬──────────┘
-                            ↓
-                 ┌─────────────────────┐
-                 │      Workflow       │
-                 │   Power Automate    │
-                 └──────────┬──────────┘
-                            ↓
-                 ┌─────────────────────┐
-                 │        Datos        │
-                 │ SharePoint/Dataverse│
-                 └──────────┬──────────┘
-                            ↓
-                 ┌─────────────────────┐
-                 │      Motor WFM      │
-                 │ Demanda / Capacidad │
-                 │ Cobertura / Impacto │
-                 └──────────┬──────────┘
-                            ↓
-                 ┌─────────────────────┐
-                 │ Reporting / Análisis│
-                 └─────────────────────┘
-```
-
-La aplicación web incluida en `demo/` representa de forma independiente la experiencia funcional y permite probar el concepto sin necesidad de disponer de un entorno Power Platform.
-
-## Ciclo de vida de una solicitud
-
-Los identificadores internos se mantienen estables para facilitar la implementación y las pruebas:
+## Arquitectura
 
 ```text
-DRAFT
-  │
-  ▼
-SUBMITTED
-  │
-  ▼
-PENDING_APPROVAL
-  │
-  ├──────────────► APPROVED
-  │
-  └──────────────► REJECTED
-
-DRAFT / SUBMITTED
-  │
-  ▼
-CANCELLED
+┌──────────────┐
+│    Usuario   │
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│ Presentación │  Power Apps / Demo web
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│   Workflow   │  Power Automate
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│    Datos     │  SharePoint / Dataverse
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│   Motor WFM  │  Demanda · Capacidad · Cobertura
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│   Análisis   │
+└──────────────┘
 ```
 
-La interfaz presenta estos estados en español.
+La carpeta `demo/` permite explorar la experiencia funcional sin necesidad de un entorno Power Platform.
 
-## Demo
+---
 
-La carpeta [`demo/`](./demo/) contiene una aplicación web independiente con datos sintéticos.
+## Aprende el código viendo la demo
 
-Permite:
+La demo está separada en cuatro piezas:
 
-- Crear solicitudes.
-- Validar fechas.
-- Buscar y filtrar.
-- Cambiar entre Empleado y Aprobador.
-- Consultar el detalle.
-- Aprobar solicitudes.
-- Rechazar solicitudes indicando un motivo.
-- Cancelar solicitudes.
-- Consultar el historial.
-- Simular impacto de capacidad.
+| Archivo | Responsabilidad |
+|---|---|
+| [index.html](./demo/index.html) | Estructura de la interfaz |
+| [styles.css](./demo/styles.css) | Apariencia y responsive |
+| [app.js](./demo/app.js) | Eventos, validaciones, filtros y flujo |
+| [wfm-engine.js](./demo/wfm-engine.js) | Cálculos WFM |
 
-### Motor WFM
+Ejemplo:
 
-El archivo [`demo/wfm-engine.js`](./demo/wfm-engine.js) contiene el motor inicial de impacto WFM.
-
-Calcula:
-
-- Capacidad requerida.
-- Capacidad planificada.
-- Variación de capacidad.
-- Capacidad resultante.
-- Déficit antes.
-- Déficit después.
-- Cobertura antes.
-- Cobertura después.
-- Nivel de riesgo.
-
-La lógica es determinista y está cubierta mediante pruebas automatizadas.
-
-## Pruebas
-
-Las pruebas del motor están en:
-
-[`tests/wfm-engine.test.js`](./tests/wfm-engine.test.js)
-
-Se ejecutan con Node.js:
-
-```bash
-node --test tests/wfm-engine.test.js
+```text
+Cambias "Tipo de solicitud"
+        ↓
+       app.js
+        ↓
+updateTypeFields()
+        ↓
+Aparecen los campos de turno
 ```
 
-Además, GitHub Actions ejecuta automáticamente estas pruebas cuando se modifican el motor, las pruebas o la demo.
+Y para el impacto:
 
-## Documentación
+```text
+app.js
+   ↓
+calculateWfmImpact()
+   ↓
+wfm-engine.js
+   ↓
+Capacidad · Déficit · Cobertura · Riesgo
+```
 
-### Arquitectura y diseño
+Esto permite utilizar la propia demo como referencia para estudiar cómo una interfaz web conecta eventos, lógica de aplicación y reglas WFM.
 
-- [Estado de implementación](./docs/implementation-status.md)
+---
+
+## Estado actual
+
+| Área | Estado |
+|---|---|
+| Demo web | **Funcional** |
+| Solicitudes | **Funcional** |
+| Validaciones | **Funcional** |
+| Aprobación / rechazo | **Funcional** |
+| Historial | **Funcional en demo** |
+| Motor de impacto WFM | **Funcional** |
+| Datos persistentes | Pendiente |
+| Impacto por intervalo | Siguiente evolución |
+| Forecast | Roadmap |
+| Dimensionamiento / Erlang C | Roadmap |
+| Optimización de turnos | Roadmap |
+
+Consulta el [estado detallado de implementación](./docs/implementation-status.md).
+
+---
+
+## Datos WFM sintéticos
+
+La carpeta [sample-data](./sample-data/) contiene datasets sintéticos para evolucionar el motor:
+
+- [requests.csv](./sample-data/requests.csv)
+- [wfm-intervals.csv](./sample-data/wfm-intervals.csv)
+- [wfm-forecast.csv](./sample-data/wfm-forecast.csv)
+- [wfm-schedule.csv](./sample-data/wfm-schedule.csv)
+
+No se utilizan datos reales, credenciales, configuraciones privadas ni activos pertenecientes a terceros.
+
+---
+
+## Documentación técnica
+
+<details>
+<summary><strong>Arquitectura y dominio</strong></summary>
+
 - [Modelo de dominio](./docs/domain-model.md)
 - [Reglas de negocio](./docs/business-rules.md)
 - [Máquina de estados](./docs/state-machine.md)
@@ -191,10 +198,12 @@ Además, GitHub Actions ejecuta automáticamente estas pruebas cuando se modific
 - [Arquitectura](./docs/architecture.md)
 - [Arquitectura de referencia](./docs/reference-architecture.md)
 - [Mapeo técnico de la demo](./docs/demo-technical-mapping.md)
-- [Decisiones técnicas](./docs/decisions.md)
 - [Modelo de datos](./docs/data-model.md)
 
-### Funcionalidad
+</details>
+
+<details>
+<summary><strong>Funcionalidad y Power Platform</strong></summary>
 
 - [Casos de uso](./docs/use-cases.md)
 - [Especificación de la demo](./docs/demo-specification.md)
@@ -202,12 +211,19 @@ Además, GitHub Actions ejecuta automáticamente estas pruebas cuando se modific
 - [Diseño de Power Apps](./docs/power-app.md)
 - [Flujos de Power Automate](./power-platform/flows/README.md)
 
-### WFM
+</details>
+
+<details>
+<summary><strong>WFM</strong></summary>
 
 - [Evaluación de impacto WFM](./docs/wfm-impact-assessment.md)
 - [Simulación WFM](./docs/wfm-simulation.md)
+- [Roadmap](./docs/roadmap.md)
 
-### Ingeniería
+</details>
+
+<details>
+<summary><strong>Ingeniería, pruebas y operación</strong></summary>
 
 - [Backlog técnico](./docs/backlog.md)
 - [Decisiones pendientes](./docs/open-decisions.md)
@@ -217,95 +233,43 @@ Además, GitHub Actions ejecuta automáticamente estas pruebas cuando se modific
 - [Casos de prueba](./tests/test-cases.md)
 - [Pruebas del motor WFM](./tests/wfm-impact-test-cases.md)
 - [ALM](./docs/alm.md)
-- [Roadmap](./docs/roadmap.md)
-- [Caso de estudio](./docs/case-study.md)
-
-### Seguridad y alcance
-
-- [Límites del proyecto](./docs/portfolio-boundaries.md)
-- [Política de seguridad](./SECURITY.md)
 - [Changelog](./CHANGELOG.md)
+
+</details>
+
+---
 
 ## Estructura
 
 ```text
 wfm-request-portal/
-├── README.md
-├── SECURITY.md
-├── CHANGELOG.md
-│
 ├── demo/
 │   ├── index.html
 │   ├── styles.css
 │   ├── app.js
-│   ├── wfm-engine.js
-│   └── README.md
-│
+│   └── wfm-engine.js
 ├── docs/
-│   ├── architecture.md
-│   ├── implementation-status.md
-│   ├── domain-model.md
-│   ├── business-rules.md
-│   ├── state-machine.md
-│   ├── data-contract.md
-│   ├── reference-architecture.md
-│   ├── demo-technical-mapping.md
-│   ├── business-case.md
-│   ├── data-model.md
-│   ├── workflow.md
-│   ├── power-app.md
-│   ├── alm.md
-│   ├── decisions.md
-│   ├── use-cases.md
-│   ├── requirements-traceability.md
-│   ├── wfm-impact-assessment.md
-│   ├── wfm-simulation.md
-│   ├── case-study.md
-│   └── roadmap.md
-│
 ├── power-platform/
-│   ├── powerfx/
-│   └── flows/
-│
 ├── sample-data/
-│   ├── requests.csv
-│   ├── wfm-intervals.csv
-│   ├── wfm-forecast.csv
-│   ├── wfm-schedule.csv
-│   └── README.md
-│
-└── tests/
-    ├── test-cases.md
-    ├── wfm-impact-test-cases.md
-    └── wfm-engine.test.js
+├── tests/
+├── README.md
+├── SECURITY.md
+└── CHANGELOG.md
 ```
 
-## Principios de desarrollo
-
-El proyecto se mantiene con estos criterios:
+## Principios
 
 - Separación entre interfaz, workflow, datos y lógica WFM.
 - Identificadores y estados explícitos.
 - Validaciones deterministas.
-- Idempotencia.
 - Trazabilidad.
 - Pruebas automatizadas.
 - Configuración frente a valores hard-coded.
-- Diseño preparado para evolución.
+- Evolución incremental.
 - Documentación de decisiones.
 - Datos sintéticos para los ejemplos públicos.
 
-## Datos WFM sintéticos
-
-La carpeta [`sample-data/`](./sample-data/) incluye ahora datasets sintéticos por intervalo para comenzar a evolucionar el motor hacia forecast, capacidad, cobertura y escenarios temporales.
-
-- [`wfm-intervals.csv`](./sample-data/wfm-intervals.csv)
-- [`wfm-forecast.csv`](./sample-data/wfm-forecast.csv)
-- [`wfm-schedule.csv`](./sample-data/wfm-schedule.csv)
-
-## Evolución prevista
-
-La evolución funcional se plantea por capas:
+## Evolución
 
 ```text
 Solicitudes
@@ -323,19 +287,4 @@ Optimización
 Reporting avanzado
 ```
 
-El siguiente nivel del motor deberá incorporar progresivamente variables reales de WFM como:
-
-- Volumen de contactos.
-- Intervalos de planificación.
-- AHT.
-- Service Level.
-- Occupancy.
-- Shrinkage.
-- Capacidad disponible.
-- Necesidad de agentes.
-- Déficit/superávit.
-- Escenarios.
-- Forecast frente a realidad.
-- Optimización de turnos.
-
-La evolución se realizará manteniendo separadas la lógica de negocio, la interfaz y las integraciones.
+Consulta el [roadmap](./docs/roadmap.md) para el detalle de las siguientes fases.
