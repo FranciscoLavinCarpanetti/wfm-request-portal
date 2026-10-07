@@ -1,6 +1,7 @@
 # Roadmap
 
-## Fase 1 — Portfolio público
+## Fase 1 — Base funcional
+
 Estado: Completada
 
 - Demo web independiente.
@@ -9,36 +10,86 @@ Estado: Completada
 - Roles Empleado / Aprobador.
 - Estados.
 - Aprobación y rechazo.
-- Auditoría.
+- Auditoría simulada.
 - Simulador WFM.
 - Documentación funcional y técnica.
 - Trazabilidad.
 - Casos de prueba.
-- GitHub Pages workflow.
+- GitHub Pages.
 
-## Fase 2 — Calidad de ingeniería
-Estado: En progreso
+## Fase 2 — Consolidación de ingeniería
 
-- Validación estática de JavaScript.
-- Tests automatizados del motor WFM.
-- Mejora de accesibilidad.
-- Gestión de errores de UI.
-- Refuerzo de sanitización.
-- Documentación de decisiones.
+Estado: Completada
 
-## Fase 3 — Power Platform de referencia
-Objetivo: definir Solution architecture, Canvas App, Cloud Flows, Connection References, Environment Variables, modelo SharePoint/Dataverse, Approval workflow y Audit History.
+- Motor WFM determinista.
+- Pruebas automatizadas.
+- CI con validación de sintaxis.
+- Accesibilidad básica.
+- Modelo de dominio.
+- Reglas de negocio.
+- Máquina de estados.
+- Contrato de datos.
+- Catálogo de errores.
+- Observabilidad.
+- Backlog técnico.
+- Decisiones pendientes.
+- Datos WFM sintéticos.
 
-La implementación debe realizarse en un entorno personal o de demostración autorizado.
+## Fase 3 — Evolución funcional
 
-## Fase 4 — Motor WFM
-Objetivo: datos sintéticos por intervalo, Forecast, Required Capacity, Scheduled Capacity, Coverage, Deficit/Surplus e Impact Assessment.
+Estado: Siguiente
+
+- Formulario dinámico por tipo.
+- Turno actual y turno solicitado.
+- Reglas ejecutables.
+- Auditoría estructurada.
+- Mayor cobertura de pruebas.
+- Matriz requisito → implementación → prueba.
+
+## Fase 4 — Motor WFM por intervalos
+
+- Forecast por intervalo.
+- Capacidad requerida.
+- Capacidad planificada.
+- Baseline vs Scenario.
+- Impacto de solicitudes por intervalo.
+- Déficit/superávit.
+- Intervalos críticos.
+- Escenarios.
 
 ## Fase 5 — Dimensionamiento avanzado
-Objetivo: AHT, Arrival Rate, Service Level, Occupancy, Shrinkage, Erlang C y sensibilidad por escenario.
+
+- Volumen.
+- AHT.
+- Arrival Rate.
+- Service Level.
+- Occupancy.
+- Shrinkage.
+- Erlang C.
+- Sensibilidad por escenario.
 
 ## Fase 6 — Optimización
-Objetivo: evaluación de alternativas, cambios de turno, redistribución de capacidad, restricciones laborales, Skills, coste y optimización multiobjetivo.
 
-## Principio del roadmap
-La evolución debe mantener separadas las capas UI → Workflow → Datos → Motor WFM → Reporting. Esto permite sustituir una capa sin reconstruir toda la solución.
+- Restricciones laborales.
+- Skills.
+- Coste.
+- Redistribución de capacidad.
+- Optimización multiobjetivo.
+
+## Principio
+
+La evolución mantiene separadas las capas:
+
+~~~text
+UI
+ ↓
+Workflow
+ ↓
+Datos
+ ↓
+Motor WFM
+ ↓
+Reporting
+~~~
+
+Esto permite evolucionar cada componente sin reconstruir toda la solución.
