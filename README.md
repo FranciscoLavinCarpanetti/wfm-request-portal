@@ -87,7 +87,16 @@ Approved
 
 La carpeta [`demo/`](./demo/) contiene una demo web independiente y reproducible del portal WFM. Permite crear solicitudes, filtrarlas, consultar su detalle, simular aprobaciones/rechazos y visualizar la trazabilidad del proceso.
 
-La correspondencia entre esta demo y una implementación real con Power Apps, Power Automate, SharePoint/Dataverse y ALM está documentada en [`docs/demo-technical-mapping.md`](./docs/demo-technical-mapping.md).
+La demo también incluye un simulador sintético de impacto WFM para comparar capacidad antes/después de una solicitud. La correspondencia con una implementación real está documentada en [`docs/demo-technical-mapping.md`](./docs/demo-technical-mapping.md) y [`docs/wfm-simulation.md`](./docs/wfm-simulation.md).
+
+## Documentación técnica destacada
+
+- [Arquitectura de referencia](./docs/reference-architecture.md)
+- [Casos de uso WFM](./docs/use-cases.md)
+- [Trazabilidad de requisitos](./docs/requirements-traceability.md)
+- [Evaluación de impacto WFM](./docs/wfm-impact-assessment.md)
+- [Simulador WFM](./docs/wfm-simulation.md)
+- [Mapeo técnico de la demo](./docs/demo-technical-mapping.md)
 
 ## Repository structure
 
