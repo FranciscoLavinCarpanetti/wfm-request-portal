@@ -1,26 +1,26 @@
-# Public Portfolio Boundaries
+# Límites del portfolio público
 
-## What this project demonstrates
+## Qué demuestra
 
-This repository demonstrates transferable capability in:
+Este repositorio demuestra capacidades transferibles en:
 
-- Workforce Management process design
-- Low-code application architecture
-- Workflow automation
-- Approval processes
-- Data modelling
-- Validation
-- Reliability
-- ALM
-- Operational traceability
+- Diseño de procesos de Workforce Management.
+- Arquitectura low-code.
+- Automatización de workflows.
+- Procesos de aprobación.
+- Modelado de datos.
+- Validación.
+- Fiabilidad.
+- ALM.
+- Trazabilidad operativa.
 
-## What it does not contain
+## Qué no contiene
 
-- Employer source code
-- Production exports
-- Internal URLs
-- Real employee data
-- Corporate credentials
-- Confidential process documentation
+- Código fuente del empleador.
+- Exportaciones de producción.
+- URLs internas.
+- Datos reales de empleados.
+- Credenciales corporativas.
+- Documentación confidencial de procesos.
 
-The implementation is deliberately generic so that it can be published as a personal technical project.
+La implementación es deliberadamente genérica para poder publicarse como proyecto técnico personal.
