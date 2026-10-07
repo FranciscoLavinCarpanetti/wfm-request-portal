@@ -1,52 +1,52 @@
-# Business Case
+# Caso de negocio
 
-## Problem
+## Problema
 
-Workforce teams often manage operational requests through email, spreadsheets and disconnected approval steps. This creates avoidable friction:
+Los equipos de Workforce Management suelen gestionar solicitudes operativas mediante correo electrónico, hojas de cálculo y pasos de aprobación desconectados. Esto genera:
 
-- Limited visibility of request status
-- Manual follow-up with approvers
-- Inconsistent validation
-- Repeated data entry
-- Weak auditability
-- Difficult reporting
+- Visibilidad limitada del estado.
+- Seguimiento manual con aprobadores.
+- Validaciones inconsistentes.
+- Entrada repetida de información.
+- Trazabilidad débil.
+- Reporting más complejo.
 
-## Proposed solution
+## Solución propuesta
 
-The WFM Request Portal provides a structured request lifecycle:
+WFM Request Portal estructura el ciclo de vida de las solicitudes:
 
 ```text
-Employee
+Empleado
    │
    ▼
-Request Portal
+Portal de solicitudes
    │
-   ├── Shift Change
-   ├── Remote Work
-   └── Leave
-   │
-   ▼
-Validation
+   ├── Cambio de turno
+   ├── Teletrabajo
+   └── Vacaciones
    │
    ▼
-Approval Workflow
-   │
-   ├── Approved
-   └── Rejected
+Validación
    │
    ▼
-Notification + Audit Trail
+Workflow de aprobación
+   │
+   ├── Aprobada
+   └── Rechazada
+   │
+   ▼
+Notificación + auditoría
 ```
 
-## Expected benefits
+## Beneficios esperados
 
-- Centralized request management
-- Reduced manual coordination
-- Clear ownership of approvals
-- Consistent status management
-- Better operational traceability
-- Foundation for WFM analytics
+- Gestión centralizada.
+- Menor coordinación manual.
+- Responsabilidad clara en las aprobaciones.
+- Estados consistentes.
+- Mejor trazabilidad operativa.
+- Base para analítica WFM.
 
-## Portfolio scope
+## Alcance del portfolio
 
-This is an independent portfolio implementation. It uses synthetic data and generic business rules and must not be interpreted as a copy or export of an employer system.
+Es una implementación independiente de portfolio. Utiliza datos sintéticos y reglas de negocio genéricas; no debe interpretarse como copia o exportación de un sistema empresarial.
