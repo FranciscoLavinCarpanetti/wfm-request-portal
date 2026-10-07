@@ -183,6 +183,11 @@ Además, GitHub Actions ejecuta automáticamente estas pruebas cuando se modific
 
 ### Arquitectura y diseño
 
+- [Estado de implementación](./docs/implementation-status.md)
+- [Modelo de dominio](./docs/domain-model.md)
+- [Reglas de negocio](./docs/business-rules.md)
+- [Máquina de estados](./docs/state-machine.md)
+- [Contrato de datos](./docs/data-contract.md)
 - [Arquitectura](./docs/architecture.md)
 - [Arquitectura de referencia](./docs/reference-architecture.md)
 - [Mapeo técnico de la demo](./docs/demo-technical-mapping.md)
@@ -204,6 +209,10 @@ Además, GitHub Actions ejecuta automáticamente estas pruebas cuando se modific
 
 ### Ingeniería
 
+- [Backlog técnico](./docs/backlog.md)
+- [Decisiones pendientes](./docs/open-decisions.md)
+- [Catálogo de errores](./docs/error-catalog.md)
+- [Observabilidad](./docs/observability.md)
 - [Trazabilidad de requisitos](./docs/requirements-traceability.md)
 - [Casos de prueba](./tests/test-cases.md)
 - [Pruebas del motor WFM](./tests/wfm-impact-test-cases.md)
@@ -275,6 +284,14 @@ El proyecto se mantiene con estos criterios:
 - Diseño preparado para evolución.
 - Documentación de decisiones.
 - Datos sintéticos para los ejemplos públicos.
+
+## Datos WFM sintéticos
+
+La carpeta [`sample-data/`](./sample-data/) incluye ahora datasets sintéticos por intervalo para comenzar a evolucionar el motor hacia forecast, capacidad, cobertura y escenarios temporales.
+
+- [`wfm-intervals.csv`](./sample-data/wfm-intervals.csv)
+- [`wfm-forecast.csv`](./sample-data/wfm-forecast.csv)
+- [`wfm-schedule.csv`](./sample-data/wfm-schedule.csv)
 
 ## Evolución prevista
 
