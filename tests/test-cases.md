@@ -1,28 +1,28 @@
-# Test Cases
+# Casos de prueba
 
-## Request creation
+## Creación
 
-| ID | Scenario | Expected result |
+| ID | Escenario | Resultado esperado |
 |---|---|---|
-| TC-001 | Valid shift change | Request submitted |
-| TC-002 | End date before start date | Validation error |
-| TC-003 | Missing request type | Validation error |
-| TC-004 | Valid leave request | Request submitted |
-| TC-005 | Valid remote-work request | Request submitted |
+| TC-001 | Cambio de turno válido | Solicitud enviada |
+| TC-002 | Fecha final anterior a inicial | Error de validación |
+| TC-003 | Tipo de solicitud vacío | Error de validación |
+| TC-004 | Vacaciones válidas | Solicitud enviada |
+| TC-005 | Teletrabajo válido | Solicitud enviada |
 
-## Approval
+## Aprobación
 
-| ID | Scenario | Expected result |
+| ID | Escenario | Resultado esperado |
 |---|---|---|
-| TC-101 | Approve pending request | Status becomes APPROVED |
-| TC-102 | Reject pending request | Status becomes REJECTED |
-| TC-103 | Decision on already processed request | No duplicate transition |
-| TC-104 | Approval connector transient failure | Retry / recoverable failure |
+| TC-101 | Aprobar pendiente | Estado APPROVED |
+| TC-102 | Rechazar pendiente | Estado REJECTED |
+| TC-103 | Decidir solicitud procesada | Sin transición duplicada |
+| TC-104 | Fallo transitorio de aprobación | Reintento o recuperación |
 
-## Notifications
+## Notificaciones
 
-| ID | Scenario | Expected result |
+| ID | Escenario | Resultado esperado |
 |---|---|---|
-| TC-201 | Approved request | Requester receives approval notification |
-| TC-202 | Rejected request | Requester receives rejection notification |
-| TC-203 | Notification failure | Request remains auditable and failure is logged |
+| TC-201 | Solicitud aprobada | Notificación de aprobación |
+| TC-202 | Solicitud rechazada | Notificación de rechazo |
+| TC-203 | Fallo de notificación | Solicitud auditable y error registrado |
