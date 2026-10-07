@@ -93,6 +93,10 @@ La demo también incorpora un pequeño **motor WFM sintético** que calcula déf
 
 ## Documentación técnica
 
+- [Case Study](./docs/case-study.md)
+- [Roadmap](./docs/roadmap.md)
+
+
 ### Arquitectura
 
 - [Arquitectura general](./docs/architecture.md)
