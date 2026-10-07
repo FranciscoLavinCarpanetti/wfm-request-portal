@@ -1,36 +1,41 @@
 # Demo
 
-This directory defines the public interactive demo planned for the WFM Request Portal.
+Esta carpeta contiene la demo web pública e interactiva del **WFM Request Portal**.
 
-The demo intentionally uses synthetic data and runs independently from any employer environment.
+La demo utiliza exclusivamente datos sintéticos y funciona de forma independiente de cualquier entorno empresarial.
 
-## Demo capabilities
+## Capacidades
 
-- Dashboard
-- Request list
-- Request creation
-- Request detail
-- Approval / rejection
-- Status transitions
-- Search and filtering
-- Synthetic persistence
+- Panel de solicitudes.
+- Creación de solicitudes.
+- Validación de fechas.
+- Consulta de detalle.
+- Aprobación y rechazo.
+- Transiciones de estado.
+- Búsqueda y filtrado.
+- Historial de auditoría simulado.
+- Simulación sintética de impacto WFM.
 
-## Target flow
+## Flujo
 
 ```text
-Dashboard
-   ↓
-Create request
-   ↓
-Validation
-   ↓
-Submitted
-   ↓
-Pending approval
-   ↓
-Approved / Rejected
-   ↓
-History
+Panel
+  ↓
+Nueva solicitud
+  ↓
+Validación
+  ↓
+Enviada
+  ↓
+Pendiente de aprobación
+  ↓
+Aprobada / Rechazada
+  ↓
+Historial
 ```
 
-The demo is the user-facing representation of the architecture described in the documentation.
+## Nota técnica
+
+La demo reproduce en navegador el comportamiento funcional descrito en la arquitectura de referencia. No utiliza Power Apps, Power Automate ni un backend real; estos componentes se documentan como arquitectura objetivo.
+
+El motor WFM incluido es determinista y sintético. Sirve para demostrar la relación entre capacidad, déficit, cobertura y riesgo, no para dimensionamiento operativo real.
