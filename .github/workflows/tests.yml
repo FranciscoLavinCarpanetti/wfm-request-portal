@@ -29,5 +29,10 @@ jobs:
         with:
           node-version: 20
 
+      - name: Validar sintaxis JavaScript
+        run: |
+          node --check demo/app.js
+          node --check demo/wfm-engine.js
+
       - name: Ejecutar pruebas del motor WFM
         run: node --test tests/wfm-engine.test.js
