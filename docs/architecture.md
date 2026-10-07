@@ -1,65 +1,65 @@
-# Architecture
+# Arquitectura
 
-## Design principles
+## Principios de diseño
 
-1. **Separation of concerns** — the Canvas App handles presentation and user interaction; workflow orchestration belongs to Power Automate; persistence belongs to the data layer.
-2. **Configuration over hard-coding** — environment-specific values should not be embedded in formulas or flows.
-3. **Explicit state transitions** — request status is controlled by workflow rules rather than arbitrary UI changes.
-4. **Idempotency** — a request should not generate duplicate approval or notification actions when a flow is retried.
-5. **Auditability** — relevant lifecycle events should be persisted.
+1. **Separación de responsabilidades** — Canvas App gestiona presentación e interacción; Power Automate orquesta el workflow; la persistencia pertenece a la capa de datos.
+2. **Configuración frente a valores hard-coded** — los valores dependientes del entorno no deben estar embebidos en fórmulas o flujos.
+3. **Transiciones de estado explícitas** — el estado de una solicitud se controla mediante reglas de workflow.
+4. **Idempotencia** — un reintento no debe generar aprobaciones ni notificaciones duplicadas.
+5. **Auditabilidad** — los eventos relevantes del ciclo de vida deben conservarse.
 
-## Logical components
+## Componentes lógicos
 
-### Presentation
+### Presentación
 
-Canvas App responsibilities:
+Responsabilidades de Canvas App:
 
-- Request creation
-- Client-side validation
-- Request listing
-- Status visualization
-- User feedback
+- Crear solicitudes.
+- Validar datos en cliente.
+- Listar solicitudes.
+- Visualizar estados.
+- Informar al usuario.
 
-### Data
+### Datos
 
-A request record should contain at minimum:
+Como mínimo, una solicitud debe contemplar:
 
-| Field | Purpose |
+| Campo | Finalidad |
 |---|---|
-| RequestId | Unique identifier |
-| RequestType | Type of WFM request |
-| Requester | Request owner |
-| StartDate | Effective start |
-| EndDate | Effective end |
-| Status | Lifecycle state |
-| SubmittedAt | Submission timestamp |
-| DecisionAt | Approval/rejection timestamp |
-| DecisionBy | Decision maker |
-| Comments | Human-readable context |
+| RequestId | Identificador único |
+| RequestType | Tipo de solicitud WFM |
+| Requester | Propietario de la solicitud |
+| StartDate | Inicio de vigencia |
+| EndDate | Fin de vigencia |
+| Status | Estado del ciclo de vida |
+| SubmittedAt | Fecha/hora de envío |
+| DecisionAt | Fecha/hora de decisión |
+| DecisionBy | Responsable de la decisión |
+| Comments | Contexto legible |
 
 ### Workflow
 
-Power Automate responsibilities:
+Responsabilidades de Power Automate:
 
-- Validate submitted requests
-- Start approval
-- Persist decision
-- Send notifications
-- Record failures
-- Prevent duplicate processing
+- Validar solicitudes enviadas.
+- Iniciar aprobación.
+- Persistir la decisión.
+- Enviar notificaciones.
+- Registrar errores.
+- Evitar procesamiento duplicado.
 
-## Error handling
+## Gestión de errores
 
-Flows should distinguish:
+El workflow debe distinguir entre:
 
-- Validation failure
-- Business-rule rejection
-- Connector failure
-- Approval timeout
-- Unexpected runtime failure
+- Error de validación.
+- Rechazo por regla de negocio.
+- Error de conector.
+- Timeout de aprobación.
+- Error inesperado de ejecución.
 
-Transient connector failures should be retryable. Business-rule failures should be deterministic and user-readable.
+Los fallos transitorios de conectores deben poder reintentarse. Los fallos de reglas de negocio deben ser deterministas y comprensibles para el usuario.
 
-## Security boundary
+## Frontera de seguridad
 
-The application must never rely on the Canvas App alone for authorization. Critical permissions and state transitions should be enforced by the data/workflow layer.
+La aplicación no debe depender únicamente de Canvas App para autorización. Los permisos críticos y las transiciones de estado deben reforzarse en la capa de datos/workflow.
