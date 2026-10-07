@@ -243,6 +243,11 @@ wfm-request-portal/
 │
 ├── docs/
 │   ├── architecture.md
+│   ├── implementation-status.md
+│   ├── domain-model.md
+│   ├── business-rules.md
+│   ├── state-machine.md
+│   ├── data-contract.md
 │   ├── reference-architecture.md
 │   ├── demo-technical-mapping.md
 │   ├── business-case.md
@@ -263,6 +268,11 @@ wfm-request-portal/
 │   └── flows/
 │
 ├── sample-data/
+│   ├── requests.csv
+│   ├── wfm-intervals.csv
+│   ├── wfm-forecast.csv
+│   ├── wfm-schedule.csv
+│   └── README.md
 │
 └── tests/
     ├── test-cases.md
