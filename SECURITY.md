@@ -1,35 +1,25 @@
-# Security and Intellectual Property
+# Seguridad y propiedad intelectual
 
-This is a public portfolio repository.
+Este repositorio es público y debe mantenerse libre de información confidencial.
 
-## Never commit
+## Nunca publicar
 
-- Production data
-- Employee personal data
-- Corporate email addresses
-- Private SharePoint URLs
-- Tenant-specific configuration
-- Passwords
-- API keys
-- OAuth tokens
-- Connection secrets
-- Exported production solutions
-- Proprietary business documentation
+- Datos de producción.
+- Datos personales de empleados.
+- Direcciones corporativas reales cuando no sean necesarias.
+- URLs privadas.
+- Configuración específica de tenants.
+- Contraseñas.
+- API keys.
+- Tokens OAuth.
+- Secretos de conectores.
+- Exportaciones de soluciones productivas.
+- Documentación confidencial.
 
-## Portfolio implementation
+## Datos públicos
 
-All examples must use synthetic data and generic configuration.
+Los ejemplos deben utilizar datos sintéticos y configuración genérica.
 
-The repository is intended to demonstrate engineering capability, architecture and transferable patterns, not to disclose an employer's implementation.
+## Revisión antes de cada publicación
 
-## Before every public commit
-
-Check:
-
-- secrets
-- personal data
-- internal URLs
-- screenshots
-- metadata
-- exported solution contents
-- configuration files
+Comprobar secretos, datos personales, URLs internas, capturas, metadatos, exportaciones y archivos de configuración.
