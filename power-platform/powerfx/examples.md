@@ -1,50 +1,50 @@
-# Power Fx Examples
+# Ejemplos de Power Fx
 
-These examples are generic and intentionally independent of any corporate environment.
+Estos ejemplos son genéricos e independientes de cualquier entorno corporativo.
 
-## Request type routing
+## Enrutamiento por tipo
 
-```powerfx
+~~~powerfx
 Switch(
     varRequestType,
     "ShiftChange", Navigate(scrShiftChange),
     "RemoteWork", Navigate(scrRemoteWork),
     "Leave", Navigate(scrLeave),
-    Notify("Unknown request type", NotificationType.Error)
+    Notify("Tipo de solicitud desconocido", NotificationType.Error)
 )
-```
+~~~
 
-## Inclusive date calculation
+## Cálculo inclusivo de fechas
 
-```powerfx
+~~~powerfx
 DateDiff(
     dpStart.SelectedDate,
     dpEnd.SelectedDate,
     TimeUnit.Days
 ) + 1
-```
+~~~
 
-## Date validation
+## Validación de fechas
 
-```powerfx
+~~~powerfx
 If(
     dpEnd.SelectedDate < dpStart.SelectedDate,
     Notify(
-        "The end date cannot precede the start date.",
+        "La fecha de fin no puede ser anterior a la fecha de inicio.",
         NotificationType.Error
     ),
     SubmitForm(frmRequest)
 )
-```
+~~~
 
-## Status-aware UI
+## UI dependiente del estado
 
-```powerfx
+~~~powerfx
 If(
     ThisItem.Status = "PENDING_APPROVAL",
     DisplayMode.View,
     DisplayMode.Edit
 )
-```
+~~~
 
-These snippets demonstrate transferable Power Fx patterns rather than reproducing an employer application.
+Los fragmentos muestran patrones transferibles de Power Fx y no reproducen una aplicación empresarial concreta.
