@@ -1,67 +1,65 @@
-# Power Apps Design
+# Diseño de Power Apps
 
-## Screens
+## Pantallas
 
-The public implementation is designed around the following Canvas App screens.
+La arquitectura objetivo de Canvas App se organiza en las siguientes pantallas.
 
-### Home
+### Inicio
 
-Purpose:
+- Mostrar solicitudes abiertas.
+- Crear una nueva solicitud.
+- Mostrar contadores resumen.
+- Proporcionar navegación.
 
-- Show the user's open requests
-- Start a new request
-- Display summary counters
-- Provide navigation
+### Nueva solicitud
 
-### New Request
+Campos habituales:
 
-Common fields:
+- Tipo de solicitud.
+- Fecha de inicio.
+- Fecha de fin.
+- Turno/horario cuando aplique.
+- Comentarios.
 
-- Request type
-- Start date
-- End date
-- Shift / schedule when applicable
-- Comments
+La validación se ejecuta antes del envío.
 
-Validation occurs before submission.
+### Mis solicitudes
 
-### My Requests
+Incluye:
 
-Provides:
+- ID de solicitud.
+- Tipo.
+- Rango de fechas.
+- Estado actual.
+- Fecha de envío.
+- Última actualización.
 
-- Request ID
-- Type
-- Date range
-- Current status
-- Submission date
-- Last update
+### Detalle
 
-### Request Detail
+Muestra la solicitud completa y su ciclo de vida.
 
-Provides the complete request and its lifecycle information.
+La edición se deshabilita cuando la solicitud entra en el proceso de aprobación.
 
-Editing is disabled after the request enters the approval process.
+### Aprobación
 
-### Approval
+Los aprobadores pueden:
 
-Approvers can:
+- Revisar los datos.
+- Aprobar.
+- Rechazar.
+- Añadir comentarios.
 
-- Review request details
-- Approve
-- Reject
-- Add comments
+## Principios UX
 
-## UX principles
-
-- Mobile-first layout
-- Clear status indicators
-- Minimal data entry
-- Immediate validation feedback
-- Accessible labels
-- Consistent navigation
+- Diseño mobile-first.
+- Estados claros.
+- Entrada de datos mínima.
+- Feedback inmediato de validación.
+- Etiquetas accesibles.
+- Navegación consistente.
 
 ## Power Fx
 
-Reusable formulas are stored under:
+Las fórmulas reutilizables se mantienen en:
 
-power-platform/powerfx/
+`power-platform/powerfx/`
