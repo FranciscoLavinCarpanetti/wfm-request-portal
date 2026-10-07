@@ -1,59 +1,59 @@
 # Application Lifecycle Management
 
-The target architecture is:
+La arquitectura objetivo es:
 
 ```text
 DEV
  │
  ▼
-Source control
+Control de código fuente
  │
  ▼
-Validation / Pull Request
+Validación / Pull Request
  │
  ▼
 TEST
  │
  ▼
-Approval
+Aprobación
  │
  ▼
 PROD
 ```
 
-## Power Platform components
+## Componentes de Power Platform
 
-A production-ready Solution should package:
+Una Solution preparada para producción debería empaquetar:
 
-- Canvas App
-- Cloud Flows
-- Connection References
-- Environment Variables
-- Dataverse components when applicable
-- Custom connectors when applicable
+- Canvas App.
+- Cloud Flows.
+- Connection References.
+- Environment Variables.
+- Componentes Dataverse cuando correspondan.
+- Custom Connectors cuando correspondan.
 
-## Environment configuration
+## Configuración por entorno
 
-Do not hard-code:
+No se deben hard-codear:
 
-- Site URLs
-- List identifiers
-- Environment-specific email addresses
-- Connector configuration
-- Secrets
+- URLs de sitios.
+- Identificadores de listas.
+- Direcciones de correo dependientes del entorno.
+- Configuración de conectores.
+- Secretos.
 
-Use environment variables and connection references instead.
+Deben utilizarse variables de entorno y referencias de conexión.
 
-## Git strategy
+## Estrategia Git
 
-Recommended branches:
+Ramas recomendadas:
 
 ```text
 main
 └── feature/*
 ```
 
-For a larger implementation:
+Para una implementación mayor:
 
 ```text
 main
@@ -62,4 +62,4 @@ feature/*
 hotfix/*
 ```
 
-Pull Requests should describe the business change, technical impact, test evidence and deployment considerations.
+Los Pull Requests deben describir el cambio funcional, impacto técnico, evidencia de pruebas y consideraciones de despliegue.
