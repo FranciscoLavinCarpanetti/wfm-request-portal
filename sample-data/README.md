@@ -1,7 +1,14 @@
-# Sample Data
+# Datos sintéticos
 
-All records in this directory are synthetic.
+Todos los registros de esta carpeta son sintéticos.
 
-They exist only to demonstrate the application's data model, lifecycle and reporting concepts.
+Se utilizan únicamente para probar el modelo de datos, el ciclo de vida y la evolución del motor WFM.
 
-No production records, employee information or corporate identifiers are used.
+## Archivos
+
+- `requests.csv`: solicitudes sintéticas.
+- `wfm-intervals.csv`: capacidad requerida y planificada por intervalo.
+- `wfm-forecast.csv`: forecast sintético y capacidad requerida.
+- `wfm-schedule.csv`: planificación sintética por intervalo.
+
+No se utilizan registros productivos, información personal real ni identificadores corporativos.
