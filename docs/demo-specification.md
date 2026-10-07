@@ -1,69 +1,72 @@
-# Demo Specification
+# Especificación de la demo
 
-## Purpose
+## Objetivo
 
-Provide a browser-accessible representation of the WFM Request Portal so a reviewer can understand the solution without access to Microsoft Power Platform.
+Proporcionar una representación accesible desde navegador del WFM Request Portal para que un revisor pueda comprender la solución sin acceso a Microsoft Power Platform.
 
 ## Roles
 
-### Employee
+### Empleado
 
-Can:
+Puede:
 
-- Create requests
-- View own requests
-- View status
-- Cancel eligible requests
+- Crear solicitudes.
+- Consultar solicitudes.
+- Ver estados.
+- Cancelar solicitudes elegibles.
 
-### Approver
+### Aprobador
 
-Can:
+Puede:
 
-- View pending requests
-- Approve requests
-- Reject requests
-- Add decision comments
+- Consultar solicitudes pendientes.
+- Aprobar.
+- Rechazar.
+- Añadir comentarios de decisión.
 
-## Dashboard
+## Panel
 
-Metrics:
+Métricas:
 
-- Total requests
-- Pending approval
-- Approved
-- Rejected
+- Total de solicitudes.
+- Pendientes de aprobación.
+- Aprobadas.
+- Rechazadas.
+- Canceladas.
 
-## Request form
+## Formulario
 
-Fields:
+Campos:
 
-- Request type
-- Start date
-- End date
-- Optional shift
-- Comments
+- Tipo de solicitud.
+- Fecha de inicio.
+- Fecha de fin.
+- Turno opcional.
+- Comentarios.
 
-## Business validation
+## Validación de negocio
 
-At minimum:
+Como mínimo:
 
-- Request type is required.
-- Start date is required.
-- End date is required.
-- End date cannot precede start date.
-- A request cannot be approved twice.
-- Rejected/approved requests cannot be edited.
+- El tipo es obligatorio.
+- La fecha de inicio es obligatoria.
+- La fecha de fin es obligatoria.
+- La fecha de fin no puede ser anterior a la de inicio.
+- Una solicitud no puede aprobarse dos veces.
+- Las solicitudes aprobadas o rechazadas no pueden editarse.
 
-## Status machine
+## Máquina de estados
 
 ```text
-DRAFT ──► SUBMITTED ──► PENDING_APPROVAL
+BORRADOR ──► ENVIADA ──► PENDIENTE DE APROBACIÓN
                               │
                        ┌──────┴──────┐
                        ▼             ▼
-                    APPROVED      REJECTED
+                    APROBADA      RECHAZADA
 ```
+
+Los identificadores internos permanecen en inglés en el código.
 
 ## UX
 
-The interface should communicate state clearly without exposing implementation details to the user.
+La interfaz debe comunicar el estado con claridad sin exponer detalles de implementación innecesarios.
