@@ -42,4 +42,10 @@ $("requestForm").onsubmit=e=>{
  requests.unshift({id,type:$("type").value,requester:$("requester").value,start,end,status:"PENDING_APPROVAL",comments:$("comments").value,history:[["Enviada",$("requester").value],["Pendiente de aprobación","Flujo de trabajo"]]});
  $("requestDialog").close();e.target.reset();render();
 };
-render();
+render();function renderSimulation(){
+ const result=calculateWfmImpact({requiredCapacity:$("requiredCapacity").value,baselineCapacity:$("baselineCapacity").value,capacityDelta:$("capacityDelta").value});
+ const risk=result.riskLevel.toLowerCase();
+ $("simulationResult").innerHTML='<div class="impact-result"><div class="impact-card"><small>Capacidad requerida</small><strong>'+result.requiredCapacity+'</strong></div><div class="impact-card"><small>Capacidad antes</small><strong>'+result.baselineCapacity+' ('+formatCoverage(result.coverageBefore)+')</strong></div><div class="impact-card"><small>Capacidad después</small><strong>'+result.scenarioCapacity+' ('+formatCoverage(result.coverageAfter)+')</strong></div><div class="impact-card"><small>Déficit posterior</small><strong>'+result.deficitAfter+'</strong></div></div><p><strong>Impacto:</strong> <span class="risk '+risk+'">'+result.riskLevel+'</span> · Variación de capacidad: '+result.deltaCapacity+'</p>';
+}
+$("simulateBtn").onclick=renderSimulation;
+renderSimulation();
