@@ -1,51 +1,47 @@
-# Power Automate Flows
+# Flujos de Power Automate
 
-The portfolio implementation models the following cloud flows.
+La arquitectura de portfolio modela los siguientes cloud flows.
 
-## 01 — Submit Request
+## 01 — Enviar solicitud
 
-Trigger:
+**Trigger:** nueva solicitud enviada.
 
-- New request submitted.
+Responsabilidades:
 
-Responsibilities:
+1. Validar la solicitud.
+2. Cambiar el estado a `PENDING_APPROVAL`.
+3. Crear la transacción de aprobación.
+4. Persistir metadatos de procesamiento.
 
-1. Validate request.
-2. Set status to PENDING_APPROVAL.
-3. Create approval transaction.
-4. Persist processing metadata.
+## 02 — Procesar aprobación
 
-## 02 — Process Approval
+**Trigger:** recepción de una decisión.
 
-Trigger:
+Responsabilidades:
 
-- Approval decision received.
+1. Validar que la solicitud continúa pendiente.
+2. Persistir la decisión.
+3. Establecer `APPROVED` o `REJECTED`.
+4. Registrar aprobador y fecha/hora.
+5. Lanzar la notificación.
 
-Responsibilities:
+## 03 — Notificación
 
-1. Validate the request is still pending.
-2. Persist decision.
-3. Set APPROVED or REJECTED.
-4. Record approver and timestamp.
-5. Trigger notification.
+Responsabilidades:
 
-## 03 — Notification
+- Informar al solicitante de la decisión final.
+- Mantener la generación de mensajes separada de las transiciones de estado.
 
-Responsibilities:
+## Fiabilidad
 
-- Notify requester about the final decision.
-- Keep message generation separate from business-state transitions.
+Los flujos deben incorporar:
 
-## Reliability
+- Políticas de reintento para fallos transitorios.
+- Ramas explícitas de error.
+- Identificadores de correlación/solicitud.
+- Comprobaciones de idempotencia.
+- Logging operativo.
 
-Flows should be designed with:
+## Nota de producción
 
-- Retry policies for transient failures.
-- Explicit failure branches.
-- Correlation/request identifiers.
-- Idempotency checks.
-- Operational logging.
-
-## Production note
-
-Connection references and environment-specific values should be configured through a Power Platform Solution rather than hard-coded.
+Las referencias de conexión y valores dependientes del entorno deben configurarse mediante una Power Platform Solution y no mediante valores hard-coded.
