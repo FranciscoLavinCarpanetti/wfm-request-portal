@@ -1,30 +1,45 @@
-const initial=[
-{id:"REQ-0001",type:"SHIFT_CHANGE",requester:"Ana Martin",start:"2026-11-03",end:"2026-11-03",status:"APPROVED"},
-{id:"REQ-0002",type:"REMOTE_WORK",requester:"Carlos Ruiz",start:"2026-11-05",end:"2026-11-05",status:"PENDING_APPROVAL"},
-{id:"REQ-0003",type:"LEAVE",requester:"Laura Gomez",start:"2026-11-10",end:"2026-11-12",status:"REJECTED"},
-{id:"REQ-0004",type:"SHIFT_CHANGE",requester:"Daniel Perez",start:"2026-11-14",end:"2026-11-14",status:"SUBMITTED"},
-{id:"REQ-0005",type:"LEAVE",requester:"Marta Lopez",start:"2026-12-01",end:"2026-12-03",status:"DRAFT"}
-];
-let requests=[...initial];
+const initial=[{id:"REQ-0001",type:"SHIFT_CHANGE",requester:"Ana Martin",start:"2026-11-03",end:"2026-11-03",status:"APPROVED",comments:"Swap morning shift",history:[["Submitted","Ana Martin"],["Approved","WFM Approver"]]},{id:"REQ-0002",type:"REMOTE_WORK",requester:"Carlos Ruiz",start:"2026-11-05",end:"2026-11-05",status:"PENDING_APPROVAL",comments:"Remote work request",history:[["Submitted","Carlos Ruiz"],["Pending approval","Workflow"]]},{id:"REQ-0003",type:"LEAVE",requester:"Laura Gomez",start:"2026-11-10",end:"2026-11-12",status:"REJECTED",comments:"Insufficient coverage",history:[["Submitted","Laura Gomez"],["Rejected","WFM Approver"]]},{id:"REQ-0004",type:"SHIFT_CHANGE",requester:"Daniel Perez",start:"2026-11-14",end:"2026-11-14",status:"SUBMITTED",comments:"Schedule adjustment",history:[["Submitted","Daniel Perez"]]},{id:"REQ-0005",type:"LEAVE",requester:"Marta Lopez",start:"2026-12-01",end:"2026-12-03",status:"DRAFT",comments:"Annual leave",history:[["Draft created","Marta Lopez"]]}];
+let requests=structuredClone(initial);
 const $=id=>document.getElementById(id);
 const label=s=>s.replaceAll("_"," ").toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function render(){
-  const q=$("search").value.toLowerCase();
-  const visible=requests.filter(r=>JSON.stringify(r).toLowerCase().includes(q));
-  $("requests").innerHTML=visible.map(r=>`<tr><td><strong>${r.id}</strong></td><td>${label(r.type)}</td><td>${r.requester}</td><td>${r.start} → ${r.end}</td><td><span class="status ${r.status.toLowerCase()}">${label(r.status)}</span></td><td><button onclick="approve('${r.id}')">Approve</button></td></tr>`).join("");
-  const count=s=>requests.filter(r=>r.status===s).length;
-  $("metrics").innerHTML=[["Total",requests.length],["Pending",count("PENDING_APPROVAL")],["Approved",count("APPROVED")],["Rejected",count("REJECTED")]].map(x=>`<div class="metric"><span>${x[0]}</span><strong>${x[1]}</strong></div>`).join("");
+ const q=$("search").value.toLowerCase(),sf=$("statusFilter").value,tf=$("typeFilter").value;
+ const visible=requests.filter(r=>(!sf||r.status===sf)&&(!tf||r.type===tf)&&JSON.stringify(r).toLowerCase().includes(q));
+ $("requests").innerHTML=visible.map(r=>{
+  let action="";
+  if(r.status==="PENDING_APPROVAL"&&$("role").value==="APPROVER") action='<button class="actionbtn approve" onclick="decide(\''+r.id+'\',true)">Approve</button> <button class="actionbtn reject" onclick="decide(\''+r.id+'\',false)">Reject</button>';
+  else if(["DRAFT","SUBMITTED"].includes(r.status)&&$("role").value==="EMPLOYEE") action='<button class="actionbtn dangerbtn" onclick="cancelRequest(\''+r.id+'\')">Cancel</button>';
+  return '<tr><td><button class="linkbtn" onclick="detail(\''+r.id+'\')">'+r.id+'</button></td><td>'+label(r.type)+'</td><td>'+esc(r.requester)+'</td><td>'+r.start+' → '+r.end+'</td><td><span class="status '+r.status.toLowerCase()+'">'+label(r.status)+'</span></td><td>'+action+'</td></tr>';
+ }).join("")||'<tr><td colspan="6" class="empty">No requests match the current filters.</td></tr>';
+ const count=s=>requests.filter(r=>r.status===s).length;
+ $("metrics").innerHTML=[["Total",requests.length],["Pending",count("PENDING_APPROVAL")],["Approved",count("APPROVED")],["Rejected",count("REJECTED")],["Cancelled",count("CANCELLED")]].map(x=>'<div class="metric"><span>'+x[0]+'</span><strong>'+x[1]+'</strong></div>').join("");
 }
-window.approve=id=>{const r=requests.find(x=>x.id===id);if(r?.status==="PENDING_APPROVAL"){r.status="APPROVED";render()}};
-$("search").addEventListener("input",render);
+window.decide=(id,approved)=>{
+ const r=requests.find(x=>x.id===id); if(!r||r.status!=="PENDING_APPROVAL") return;
+ if(!approved){const reason=prompt("Rejection comment (required):");if(!reason?.trim())return;r.comments=reason.trim();r.history.push(["Rejected","WFM Approver — "+reason.trim()]);r.status="REJECTED";}
+ else{r.status="APPROVED";r.history.push(["Approved","WFM Approver"]);}
+ render();
+};
+window.cancelRequest=id=>{const r=requests.find(x=>x.id===id);if(r&&confirm("Cancel this request?")){r.status="CANCELLED";r.history.push(["Cancelled",r.requester]);render();}};
+window.detail=id=>{
+ const r=requests.find(x=>x.id===id);if(!r)return;
+ $("detailTitle").textContent=r.id+" — "+label(r.type);
+ $("detailBody").innerHTML='<div class="detail-grid"><div class="detail-item"><small>Requester</small><strong>'+esc(r.requester)+'</strong></div><div class="detail-item"><small>Status</small><span class="status '+r.status.toLowerCase()+'">'+label(r.status)+'</span></div><div class="detail-item"><small>Dates</small><strong>'+r.start+' → '+r.end+'</strong></div><div class="detail-item"><small>Comments</small><strong>'+esc(r.comments||"—")+'</strong></div></div><h3>Audit history</h3><div class="timeline">'+r.history.map(e=>'<div class="event"><strong>'+esc(e[0])+'</strong><small>'+esc(e[1])+' · synthetic audit event</small></div>').join("")+'</div>';
+ $("detailActions").innerHTML=r.status==="PENDING_APPROVAL"&&$("role").value==="APPROVER"?'<button class="actionbtn approve" onclick="decide(\''+r.id+'\',true);detail(\''+r.id+'\')">Approve</button><button class="actionbtn reject" onclick="decide(\''+r.id+'\',false);detail(\''+r.id+'\')">Reject</button>':"";
+ $("detailDialog").showModal();
+};
+$("search").oninput=render;$("statusFilter").onchange=render;$("typeFilter").onchange=render;$("role").onchange=render;
 $("newRequestBtn").onclick=()=>{$("formError").textContent="";$("requestDialog").showModal()};
-$("requestForm").addEventListener("submit",e=>{
-  e.preventDefault();
-  const start=$("start").value,end=$("end").value;
-  if(!$("type").value||!start||!end){$("formError").textContent="Complete all required fields.";return}
-  if(end<start){$("formError").textContent="End date cannot precede start date.";return}
-  const id=`REQ-${String(requests.length+1).padStart(4,"0")}`;
-  requests.unshift({id,type:$("type").value,requester:$("requester").value,start,end,status:"PENDING_APPROVAL"});
-  $("requestDialog").close();e.target.reset();render();
-});
+$("cancelForm").onclick=()=>$("requestDialog").close();
+$("closeDetail").onclick=()=>$("detailDialog").close();
+$("requestForm").onsubmit=e=>{
+ e.preventDefault();const start=$("start").value,end=$("end").value;
+ if(!$("type").value||!start||!end){$("formError").textContent="Complete all required fields.";return}
+ if(end<start){$("formError").textContent="End date cannot precede start date.";return}
+ const maxId=Math.max(5,...requests.map(r=>Number(r.id.split("-")[1])));
+ const id="REQ-"+String(maxId+1).padStart(4,"0");
+ requests.unshift({id,type:$("type").value,requester:$("requester").value,start,end,status:"PENDING_APPROVAL",comments:$("comments").value,history:[["Submitted",$("requester").value],["Pending approval","Workflow"]]});
+ $("requestDialog").close();e.target.reset();render();
+};
 render();
