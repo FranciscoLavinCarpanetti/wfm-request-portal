@@ -83,6 +83,12 @@ Pending approval
 Approved
 ```
 
+## Demo interactiva
+
+La carpeta [`demo/`](./demo/) contiene una demo web independiente y reproducible del portal WFM. Permite crear solicitudes, filtrarlas, consultar su detalle, simular aprobaciones/rechazos y visualizar la trazabilidad del proceso.
+
+La correspondencia entre esta demo y una implementación real con Power Apps, Power Automate, SharePoint/Dataverse y ALM está documentada en [`docs/demo-technical-mapping.md`](./docs/demo-technical-mapping.md).
+
 ## Repository structure
 
 ```text
