@@ -11,7 +11,7 @@ const labels={SHIFT_CHANGE:"Cambio de turno",REMOTE_WORK:"Teletrabajo",LEAVE:"Va
 const label=s=>labels[s]||String(s??"");
 const riskLabels={LOW:"BAJO",MEDIUM:"MEDIO",HIGH:"ALTO",CRITICAL:"CRÍTICO"};
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-function render(){
+function updateTypeFields(){ const isShift=$("type").value==="SHIFT_CHANGE"; $("shiftFields").hidden=!isShift; $("currentShift").required=isShift; $("requestedShift").required=isShift; }\nfunction render(){
  const q=$("search").value.toLowerCase(),sf=$("statusFilter").value,tf=$("typeFilter").value;
  const visible=requests.filter(r=>(!sf||r.status===sf)&&(!tf||r.type===tf)&&JSON.stringify(r).toLowerCase().includes(q));
  $("requests").innerHTML=visible.map(r=>{
@@ -41,16 +41,16 @@ window.detail=id=>{
  $("detailDialog").showModal();
 };
 $("search").oninput=render;$("statusFilter").onchange=render;$("typeFilter").onchange=render;$("role").onchange=render;
-$("newRequestBtn").onclick=()=>{$("formError").textContent="";$("requestDialog").showModal()};
+$("newRequestBtn").onclick=()=>{$("formError").textContent="";$("requestDialog").showModal();updateTypeFields()};
 $("cancelForm").onclick=()=>$("requestDialog").close();
 $("closeDetail").onclick=()=>$("detailDialog").close();
 $("requestForm").onsubmit=e=>{
  e.preventDefault();const start=$("start").value,end=$("end").value;
- if(!$("type").value||!start||!end){$("formError").textContent="Completa todos los campos obligatorios.";return}
+ if(!$("type").value||!start||!end){$("formError").textContent="Completa todos los campos obligatorios.";return}\n if($("type").value==="SHIFT_CHANGE" && (!$("currentShift").value||!$("requestedShift").value)){ $("formError").textContent="Indica el turno actual y el turno solicitado.";return }\n if($("type").value==="SHIFT_CHANGE" && $("currentShift").value===$("requestedShift").value){ $("formError").textContent="El turno solicitado debe ser diferente del turno actual.";return }
  if(end<start){$("formError").textContent="La fecha de fin no puede ser anterior a la fecha de inicio.";return}
  const maxId=Math.max(5,...requests.map(r=>Number(r.id.split("-")[1])));
  const id="REQ-"+String(maxId+1).padStart(4,"0");
- requests.unshift({id,type:$("type").value,requester:$("requester").value.trim(),start,end,status:"PENDING_APPROVAL",comments:$("comments").value.trim(),history:[["Enviada",$("requester").value.trim()],["Pendiente de aprobación","Flujo de trabajo"]]});
+ requests.unshift({id,type:$("type").value,requester:$("requester").value.trim(),start,end,status:"PENDING_APPROVAL",comments:$("comments").value.trim(),currentShift:$("currentShift").value,requestedShift:$("requestedShift").value,history:[["Enviada",$("requester").value.trim()],["Pendiente de aprobación","Flujo de trabajo"]]});
  $("requestDialog").close();e.target.reset();render();
 };
 function renderSimulation(){
