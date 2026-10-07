@@ -1,37 +1,37 @@
-# Technical Decisions
+# Decisiones técnicas
 
 ## Power Apps
 
-Chosen for the request-facing application because the workflow is form-driven and integrates naturally with Microsoft 365 / Power Platform services.
+Se selecciona para la aplicación orientada a solicitudes porque el proceso es principalmente formularios y se integra de forma natural con Microsoft 365 y Power Platform.
 
 ## Power Automate
 
-Chosen for orchestration because approvals, notifications and asynchronous processing are workflow-oriented concerns.
+Se utiliza para la orquestación porque aprobaciones, notificaciones y procesamiento asíncrono son responsabilidades propias de workflow.
 
-## SharePoint vs Dataverse
+## SharePoint frente a Dataverse
 
-SharePoint is suitable for a lightweight implementation where structured lists are sufficient.
+SharePoint es adecuado para una implementación ligera cuando las listas estructuradas son suficientes.
 
-Dataverse becomes preferable when the solution requires:
+Dataverse resulta preferible cuando se requiere:
 
-- Strong relational modelling
-- Complex security
-- Larger transactional workloads
-- Enterprise ALM
-- Rich business rules
+- Modelado relacional fuerte.
+- Seguridad compleja.
+- Mayor carga transaccional.
+- ALM empresarial.
+- Reglas de negocio más ricas.
 
-The portfolio architecture keeps the data layer replaceable.
+La arquitectura de portfolio mantiene la capa de datos sustituible.
 
-## Why separate workflow responsibilities?
+## Separación de responsabilidades del workflow
 
-Keeping validation, approval processing and notification concerns separate improves:
+Separar validación, procesamiento de aprobación y notificaciones mejora:
 
-- Maintainability
-- Observability
-- Retry behaviour
-- Testing
-- Change isolation
+- Mantenibilidad.
+- Observabilidad.
+- Comportamiento de reintentos.
+- Pruebas.
+- Aislamiento de cambios.
 
-## Why explicit states?
+## Estados explícitos
 
-A finite state model makes business transitions predictable and prevents arbitrary UI-driven status changes.
+Una máquina de estados finita hace previsibles las transiciones y evita cambios arbitrarios de estado desde la interfaz.
