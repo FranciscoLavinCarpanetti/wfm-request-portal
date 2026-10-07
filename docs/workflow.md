@@ -1,41 +1,41 @@
 # Workflow
 
-## Submission
+## Envío
 
-1. User completes a request.
-2. Client-side validation executes.
-3. Request is persisted.
-4. Status changes to `SUBMITTED`.
-5. Workflow starts.
+1. El usuario completa una solicitud.
+2. Se ejecuta la validación en cliente.
+3. La solicitud se persiste.
+4. El estado pasa a `SUBMITTED`.
+5. Se inicia el workflow.
 
-## Approval
+## Aprobación
 
-1. Workflow validates the request.
-2. Status becomes `PENDING_APPROVAL`.
-3. Approver receives the approval request.
-4. Decision is persisted.
-5. Status becomes `APPROVED` or `REJECTED`.
-6. Requester receives a notification.
-7. Audit information is retained.
+1. El workflow valida la solicitud.
+2. El estado pasa a `PENDING_APPROVAL`.
+3. El aprobador recibe la solicitud.
+4. Se persiste la decisión.
+5. El estado pasa a `APPROVED` o `REJECTED`.
+6. El solicitante recibe una notificación.
+7. Se conserva la información de auditoría.
 
-## Idempotency
+## Idempotencia
 
-The workflow should verify whether an approval process already exists for the request before creating another one.
+El workflow debe comprobar si ya existe un proceso de aprobación para la solicitud antes de crear otro.
 
-A useful pattern is a unique business key:
+Un patrón útil es utilizar una clave de negocio única:
 
 ```text
 RequestId + WorkflowVersion
 ```
 
-or an explicit processing flag/state controlled transactionally.
+También puede utilizarse un estado o indicador de procesamiento controlado transaccionalmente.
 
-## Failure strategy
+## Estrategia ante fallos
 
-A failed automation should:
+Una automatización fallida debe:
 
-- preserve the request;
-- record the failure;
-- avoid silently losing the transaction;
-- provide an operational recovery path;
-- avoid sending duplicate notifications after retry.
+- conservar la solicitud;
+- registrar el fallo;
+- evitar perder silenciosamente la transacción;
+- proporcionar una vía de recuperación operativa;
+- evitar notificaciones duplicadas después de un reintento.
