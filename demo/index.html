@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>WFM Request Portal — Demo</title>
+  <meta name="description" content="Public demo of a Workforce Management request and approval portal.">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div><strong>WFM Request Portal</strong><span class="badge">DEMO</span></div>
+    <div class="role">Role: <strong>Approver</strong></div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">WORKFORCE MANAGEMENT</p>
+        <h1>Request operations dashboard</h1>
+        <p class="muted">Synthetic portfolio demo showing request management, validation and approval workflows.</p>
+      </div>
+      <button id="newRequestBtn" class="primary">+ New request</button>
+    </section>
+
+    <section class="metrics" id="metrics"></section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div><h2>Requests</h2><p class="muted">Synthetic records only</p></div>
+        <input id="search" type="search" placeholder="Search requests...">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Type</th><th>Requester</th><th>Dates</th><th>Status</th><th></th></tr></thead>
+          <tbody id="requests"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="requestDialog">
+    <form method="dialog" id="requestForm">
+      <h2>New request</h2>
+      <label>Request type<select id="type" required><option value="">Select...</option><option>SHIFT_CHANGE</option><option>REMOTE_WORK</option><option>LEAVE</option></select></label>
+      <label>Requester<input id="requester" required value="Demo User"></label>
+      <div class="grid2"><label>Start date<input id="start" type="date" required></label><label>End date<input id="end" type="date" required></label></div>
+      <label>Comments<textarea id="comments" rows="3"></textarea></label>
+      <p id="formError" class="error"></p>
+      <div class="actions"><button value="cancel">Cancel</button><button id="submitBtn" class="primary" value="default">Submit request</button></div>
+    </form>
+  </dialog>
+
+  <script src="./app.js"></script>
+</body>
+</html>
