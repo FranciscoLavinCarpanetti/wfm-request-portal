@@ -1,4 +1,4 @@
-const initial=[{id:"REQ-0001",type:"SHIFT_CHANGE",requester:"Ana Martin",start:"2026-11-03",end:"2026-11-03",status:"APPROVED",comments:"Swap morning shift",history:[["Submitted","Ana Martin"],["Approved","WFM Approver"]]},{id:"REQ-0002",type:"REMOTE_WORK",requester:"Carlos Ruiz",start:"2026-11-05",end:"2026-11-05",status:"PENDING_APPROVAL",comments:"Remote work request",history:[["Submitted","Carlos Ruiz"],["Pending approval","Workflow"]]},{id:"REQ-0003",type:"LEAVE",requester:"Laura Gomez",start:"2026-11-10",end:"2026-11-12",status:"REJECTED",comments:"Insufficient coverage",history:[["Submitted","Laura Gomez"],["Rejected","WFM Approver"]]},{id:"REQ-0004",type:"SHIFT_CHANGE",requester:"Daniel Perez",start:"2026-11-14",end:"2026-11-14",status:"SUBMITTED",comments:"Schedule adjustment",history:[["Submitted","Daniel Perez"]]},{id:"REQ-0005",type:"LEAVE",requester:"Marta Lopez",start:"2026-12-01",end:"2026-12-03",status:"DRAFT",comments:"Annual leave",history:[["Draft created","Marta Lopez"]]}];
+const initial=[{id:"REQ-0001",type:"SHIFT_CHANGE",requester:"Ana Martin",start:"2026-11-03",end:"2026-11-03",status:"APPROVED",comments:"Swap morning shift",history:[["Enviada","Ana Martin"],["Aprobada","Aprobador WFM"]]},{id:"REQ-0002",type:"REMOTE_WORK",requester:"Carlos Ruiz",start:"2026-11-05",end:"2026-11-05",status:"PENDING_APPROVAL",comments:"Remote work request",history:[["Submitted","Carlos Ruiz"],["Pendiente de aprobación","Flujo de trabajo"]]},{id:"REQ-0003",type:"LEAVE",requester:"Laura Gomez",start:"2026-11-10",end:"2026-11-12",status:"REJECTED",comments:"Insufficient coverage",history:[["Submitted","Laura Gomez"],["Rechazada","Aprobador WFM"]]},{id:"REQ-0004",type:"SHIFT_CHANGE",requester:"Daniel Perez",start:"2026-11-14",end:"2026-11-14",status:"SUBMITTED",comments:"Schedule adjustment",history:[["Enviada","Daniel Perez"]]},{id:"REQ-0005",type:"LEAVE",requester:"Marta Lopez",start:"2026-12-01",end:"2026-12-03",status:"DRAFT",comments:"Annual leave",history:[["Borrador creado","Marta Lopez"]]}];
 let requests=structuredClone(initial);
 const $=id=>document.getElementById(id);
 const label=s=>s.replaceAll("_"," ").toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
@@ -17,11 +17,11 @@ function render(){
 }
 window.decide=(id,approved)=>{
  const r=requests.find(x=>x.id===id); if(!r||r.status!=="PENDING_APPROVAL") return;
- if(!approved){const reason=prompt("Rejection comment (required):");if(!reason?.trim())return;r.comments=reason.trim();r.history.push(["Rejected","WFM Approver — "+reason.trim()]);r.status="REJECTED";}
- else{r.status="APPROVED";r.history.push(["Approved","WFM Approver"]);}
+ if(!approved){const reason=prompt("Motivo de rechazo (obligatorio):");if(!reason?.trim())return;r.comments=reason.trim();r.history.push([ "Rechazada","Aprobador WFM — "+reason.trim()]);r.status="REJECTED";}
+ else{r.status="APPROVED";r.history.push(["Aprobada","Aprobador WFM"]);}
  render();
 };
-window.cancelRequest=id=>{const r=requests.find(x=>x.id===id);if(r&&confirm("Cancel this request?")){r.status="CANCELLED";r.history.push(["Cancelled",r.requester]);render();}};
+window.cancelRequest=id=>{const r=requests.find(x=>x.id===id);if(r&&confirm("¿Cancelar esta solicitud?")){r.status="CANCELLED";r.history.push(["Cancelada",r.requester]);render();}};
 window.detail=id=>{
  const r=requests.find(x=>x.id===id);if(!r)return;
  $("detailTitle").textContent=r.id+" — "+label(r.type);
@@ -35,11 +35,11 @@ $("cancelForm").onclick=()=>$("requestDialog").close();
 $("closeDetail").onclick=()=>$("detailDialog").close();
 $("requestForm").onsubmit=e=>{
  e.preventDefault();const start=$("start").value,end=$("end").value;
- if(!$("type").value||!start||!end){$("formError").textContent="Complete all required fields.";return}
- if(end<start){$("formError").textContent="End date cannot precede start date.";return}
+ if(!$("type").value||!start||!end){$("formError").textContent="Completa todos los campos obligatorios.";return}
+ if(end<start){$("formError").textContent="La fecha de fin no puede ser anterior a la fecha de inicio.";return}
  const maxId=Math.max(5,...requests.map(r=>Number(r.id.split("-")[1])));
  const id="REQ-"+String(maxId+1).padStart(4,"0");
- requests.unshift({id,type:$("type").value,requester:$("requester").value,start,end,status:"PENDING_APPROVAL",comments:$("comments").value,history:[["Submitted",$("requester").value],["Pending approval","Workflow"]]});
+ requests.unshift({id,type:$("type").value,requester:$("requester").value,start,end,status:"PENDING_APPROVAL",comments:$("comments").value,history:[["Enviada",$("requester").value],["Pendiente de aprobación","Flujo de trabajo"]]});
  $("requestDialog").close();e.target.reset();render();
 };
 render();
