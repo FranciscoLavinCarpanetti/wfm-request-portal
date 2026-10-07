@@ -1,233 +1,314 @@
 # WFM Request Portal
 
-Plataforma de portfolio para la gestión de solicitudes de **Workforce Management (WFM)**, diseñada alrededor de patrones de Microsoft Power Platform y principios de ingeniería de software.
+Repositorio de referencia para documentar y evolucionar una solución de **Workforce Management (WFM)** orientada a la gestión estructurada de solicitudes operativas.
 
-> **Proyecto independiente de portfolio:** esta implementación se ha construido de forma independiente a partir de patrones operativos transferibles. No contiene código fuente de Telpark, datos de producción, credenciales, URLs privadas ni configuración corporativa.
+El objetivo de este repositorio es mantener un registro técnico y funcional de lo que se va construyendo: decisiones, arquitectura, reglas, modelos de datos, workflows, pruebas, simulaciones y evolución futura de la solución.
 
-## Qué demuestra
+> **Proyecto independiente:** el repositorio utiliza conceptos y patrones generales de WFM, automatización y desarrollo de software. No contiene datos reales, credenciales, configuraciones privadas ni activos pertenecientes a terceros.
 
-El proyecto muestra cómo transformar un proceso manual de solicitudes WFM en un workflow estructurado con:
+## Objetivo
 
-- Solicitudes de cambio de turno.
-- Solicitudes de teletrabajo.
-- Solicitudes de vacaciones.
-- Validaciones.
-- Aprobaciones y rechazos.
-- Historial y auditoría.
-- Automatización.
-- Evaluación sintética de impacto WFM.
-- Trazabilidad de requisitos.
-- Diseño orientado a ALM y mantenibilidad.
+Transformar la gestión de solicitudes operativas en un proceso estructurado, trazable y preparado para evolucionar hacia capacidades más avanzadas de WFM.
 
-## Arquitectura
+La solución parte de tres tipos de solicitud:
 
-~~~text
-Usuario
-   |
-   v
-Power Apps
-   |
-   v
-Datos
-SharePoint / Dataverse
-   |
-   v
-Power Automate
-   |
-   +---- Validación
-   +---- Aprobación
-   +---- Notificación
-   +---- Auditoría
-   |
-   v
-Reporting / WFM
-   |
-   +---- Demanda
-   +---- Capacidad
-   +---- Cobertura
-   +---- Impacto
-~~~
+- Cambio de turno.
+- Teletrabajo.
+- Vacaciones.
 
-La demo pública reproduce la lógica funcional mediante una aplicación web independiente con datos sintéticos.
+Y contempla su recorrido desde la creación hasta la decisión:
 
-## Ciclo de vida
+```text
+Solicitud
+   ↓
+Validación
+   ↓
+Enviada
+   ↓
+Pendiente de aprobación
+   ↓
+Aprobada / Rechazada
+   ↓
+Historial y auditoría
+```
 
-~~~text
+La intención no es limitar la solución a la gestión administrativa de solicitudes. El proyecto está diseñado para evolucionar hacia el análisis de cómo cada solicitud puede modificar la **capacidad operativa y la cobertura WFM**.
+
+## Qué estamos construyendo
+
+### Gestión de solicitudes
+
+- Creación de solicitudes.
+- Validación de datos.
+- Consulta de solicitudes.
+- Búsqueda y filtrado.
+- Detalle de cada solicitud.
+- Cancelación cuando corresponda.
+- Aprobación y rechazo.
+- Registro del motivo de rechazo.
+- Historial de eventos.
+
+### Impacto WFM
+
+La solución incorpora un primer motor determinista para relacionar:
+
+```text
+Solicitud
+   ↓
+Variación de capacidad
+   ↓
+Capacidad antes / después
+   ↓
+Déficit
+   ↓
+Cobertura
+   ↓
+Nivel de impacto
+```
+
+Esta primera versión es deliberadamente sencilla. Su finalidad es establecer una base sobre la que posteriormente puedan incorporarse forecast, AHT, volumen, intervalos, occupancy, service level, shrinkage, Erlang C y dimensionamiento.
+
+## Arquitectura de referencia
+
+La arquitectura funcional se organiza en capas:
+
+```text
+                 ┌─────────────────────┐
+                 │      Usuario         │
+                 └──────────┬──────────┘
+                            ↓
+                 ┌─────────────────────┐
+                 │    Presentación     │
+                 │    Power Apps       │
+                 └──────────┬──────────┘
+                            ↓
+                 ┌─────────────────────┐
+                 │      Workflow       │
+                 │   Power Automate    │
+                 └──────────┬──────────┘
+                            ↓
+                 ┌─────────────────────┐
+                 │        Datos        │
+                 │ SharePoint/Dataverse│
+                 └──────────┬──────────┘
+                            ↓
+                 ┌─────────────────────┐
+                 │      Motor WFM      │
+                 │ Demanda / Capacidad │
+                 │ Cobertura / Impacto │
+                 └──────────┬──────────┘
+                            ↓
+                 ┌─────────────────────┐
+                 │ Reporting / Análisis│
+                 └─────────────────────┘
+```
+
+La aplicación web incluida en `demo/` representa de forma independiente la experiencia funcional y permite probar el concepto sin necesidad de disponer de un entorno Power Platform.
+
+## Ciclo de vida de una solicitud
+
+Los identificadores internos se mantienen estables para facilitar la implementación y las pruebas:
+
+```text
 DRAFT
-  |
-  v
+  │
+  ▼
 SUBMITTED
-  |
-  v
+  │
+  ▼
 PENDING_APPROVAL
-  |
-  +----> APPROVED
-  |
-  +----> REJECTED
+  │
+  ├──────────────► APPROVED
+  │
+  └──────────────► REJECTED
 
 DRAFT / SUBMITTED
-  |
-  v
+  │
+  ▼
 CANCELLED
-~~~
+```
 
-## Demo interactiva
+La interfaz presenta estos estados en español.
 
-La carpeta [`demo/`](./demo/) contiene una demo web independiente y reproducible.
+## Demo
+
+La carpeta [`demo/`](./demo/) contiene una aplicación web independiente con datos sintéticos.
 
 Permite:
 
 - Crear solicitudes.
 - Validar fechas.
 - Buscar y filtrar.
-- Cambiar entre vista de Empleado y Aprobador.
-- Consultar detalle.
-- Aprobar y rechazar.
-- Registrar motivos de rechazo.
+- Cambiar entre Empleado y Aprobador.
+- Consultar el detalle.
+- Aprobar solicitudes.
+- Rechazar solicitudes indicando un motivo.
 - Cancelar solicitudes.
-- Visualizar historial.
+- Consultar el historial.
 - Simular impacto de capacidad.
-- Comparar capacidad antes y después de una solicitud.
 
-La demo también incorpora un pequeño **motor WFM sintético** que calcula déficit, cobertura, variación de capacidad y nivel de impacto.
+### Motor WFM
 
-## Documentación técnica
+El archivo [`demo/wfm-engine.js`](./demo/wfm-engine.js) contiene el motor inicial de impacto WFM.
 
-- [Case Study](./docs/case-study.md)
-- [Roadmap](./docs/roadmap.md)
+Calcula:
 
+- Capacidad requerida.
+- Capacidad planificada.
+- Variación de capacidad.
+- Capacidad resultante.
+- Déficit antes.
+- Déficit después.
+- Cobertura antes.
+- Cobertura después.
+- Nivel de riesgo.
 
-### Arquitectura
+La lógica es determinista y está cubierta mediante pruebas automatizadas.
 
-- [Arquitectura general](./docs/architecture.md)
+## Pruebas
+
+Las pruebas del motor están en:
+
+[`tests/wfm-engine.test.js`](./tests/wfm-engine.test.js)
+
+Se ejecutan con Node.js:
+
+```bash
+node --test tests/wfm-engine.test.js
+```
+
+Además, GitHub Actions ejecuta automáticamente estas pruebas cuando se modifican el motor, las pruebas o la demo.
+
+## Documentación
+
+### Arquitectura y diseño
+
+- [Arquitectura](./docs/architecture.md)
 - [Arquitectura de referencia](./docs/reference-architecture.md)
 - [Mapeo técnico de la demo](./docs/demo-technical-mapping.md)
+- [Decisiones técnicas](./docs/decisions.md)
+- [Modelo de datos](./docs/data-model.md)
 
-### Funcionalidad WFM
+### Funcionalidad
 
 - [Casos de uso](./docs/use-cases.md)
+- [Especificación de la demo](./docs/demo-specification.md)
+- [Workflow](./docs/workflow.md)
+- [Diseño de Power Apps](./docs/power-app.md)
+- [Flujos de Power Automate](./power-platform/flows/README.md)
+
+### WFM
+
 - [Evaluación de impacto WFM](./docs/wfm-impact-assessment.md)
 - [Simulación WFM](./docs/wfm-simulation.md)
 
 ### Ingeniería
 
-- [Modelo de datos](./docs/data-model.md)
-- [Workflow](./docs/workflow.md)
-- [Power Apps](./docs/power-app.md)
-- [Power Fx](./power-platform/powerfx/examples.md)
-- [ALM](./docs/alm.md)
-- [Decisiones arquitectónicas](./docs/decisions.md)
 - [Trazabilidad de requisitos](./docs/requirements-traceability.md)
 - [Casos de prueba](./tests/test-cases.md)
 - [Pruebas del motor WFM](./tests/wfm-impact-test-cases.md)
+- [ALM](./docs/alm.md)
+- [Roadmap](./docs/roadmap.md)
+- [Caso de estudio](./docs/case-study.md)
 
-### Seguridad y portfolio
+### Seguridad y alcance
 
-- [Límites del portfolio](./docs/portfolio-boundaries.md)
+- [Límites del proyecto](./docs/portfolio-boundaries.md)
 - [Política de seguridad](./SECURITY.md)
 - [Changelog](./CHANGELOG.md)
 
-## Tecnologías y conceptos
-
-- Microsoft Power Apps.
-- Power Automate.
-- SharePoint / Dataverse.
-- Power Fx.
-- Git / GitHub.
-- Power Platform ALM.
-- Modelado de datos.
-- Workflows.
-- Aprobaciones.
-- Idempotencia.
-- Auditoría.
-- Observabilidad.
-- Workforce Management.
-- Forecast y capacidad.
-- Cobertura operativa.
-
-## Objetivos técnicos
-
-- Separar presentación, datos y workflow.
-- Evitar lógica de negocio innecesariamente acoplada a la interfaz.
-- Utilizar configuración en lugar de valores hard-coded.
-- Evitar ejecuciones duplicadas.
-- Mantener trazabilidad de las transiciones.
-- Facilitar pruebas.
-- Diseñar para evolución y mantenibilidad.
-- Aplicar principios de ALM a soluciones low-code.
-
 ## Estructura
 
-~~~text
+```text
 wfm-request-portal/
 ├── README.md
 ├── SECURITY.md
 ├── CHANGELOG.md
+│
+├── demo/
+│   ├── index.html
+│   ├── styles.css
+│   ├── app.js
+│   ├── wfm-engine.js
+│   └── README.md
+│
 ├── docs/
 │   ├── architecture.md
+│   ├── reference-architecture.md
+│   ├── demo-technical-mapping.md
 │   ├── business-case.md
 │   ├── data-model.md
 │   ├── workflow.md
 │   ├── power-app.md
 │   ├── alm.md
 │   ├── decisions.md
-│   ├── demo-specification.md
-│   ├── demo-technical-mapping.md
-│   ├── reference-architecture.md
 │   ├── use-cases.md
 │   ├── requirements-traceability.md
 │   ├── wfm-impact-assessment.md
-│   └── wfm-simulation.md
+│   ├── wfm-simulation.md
+│   ├── case-study.md
+│   └── roadmap.md
+│
 ├── power-platform/
 │   ├── powerfx/
 │   └── flows/
+│
 ├── sample-data/
-├── tests/
-└── demo/
-    ├── index.html
-    ├── styles.css
-    ├── app.js
-    └── wfm-engine.js
-~~~
+│
+└── tests/
+    ├── test-cases.md
+    ├── wfm-impact-test-cases.md
+    └── wfm-engine.test.js
+```
 
-## Alcance del portfolio
+## Principios de desarrollo
 
-El proyecto separa deliberadamente los patrones de ingeniería transferibles de cualquier implementación empresarial concreta.
+El proyecto se mantiene con estos criterios:
 
-No se publican:
-
-- Datos reales.
-- Información personal de empleados.
-- Credenciales.
-- Secretos.
-- URLs privadas.
-- Configuración de tenants.
-- Exportaciones de soluciones corporativas.
-- Reglas internas confidenciales.
-
-Los datos de la demo son sintéticos.
+- Separación entre interfaz, workflow, datos y lógica WFM.
+- Identificadores y estados explícitos.
+- Validaciones deterministas.
+- Idempotencia.
+- Trazabilidad.
+- Pruebas automatizadas.
+- Configuración frente a valores hard-coded.
+- Diseño preparado para evolución.
+- Documentación de decisiones.
+- Datos sintéticos para los ejemplos públicos.
 
 ## Evolución prevista
 
-El proyecto puede evolucionar hacia:
+La evolución funcional se plantea por capas:
 
-~~~text
+```text
 Solicitudes
-    |
-    v
+    ↓
 Impacto WFM
-    |
-    v
+    ↓
 Cobertura
-    |
-    v
+    ↓
 Forecast
-    |
-    v
+    ↓
 Dimensionamiento
-    |
-    v
+    ↓
 Optimización
-~~~
+    ↓
+Reporting avanzado
+```
 
-El objetivo es demostrar cómo combinar **WFM + automatización + low-code + ingeniería de software** en una solución mantenible y escalable.
+El siguiente nivel del motor deberá incorporar progresivamente variables reales de WFM como:
+
+- Volumen de contactos.
+- Intervalos de planificación.
+- AHT.
+- Service Level.
+- Occupancy.
+- Shrinkage.
+- Capacidad disponible.
+- Necesidad de agentes.
+- Déficit/superávit.
+- Escenarios.
+- Forecast frente a realidad.
+- Optimización de turnos.
+
+La evolución se realizará manteniendo separadas la lógica de negocio, la interfaz y las integraciones.
